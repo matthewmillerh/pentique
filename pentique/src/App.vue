@@ -2,12 +2,11 @@
 import { RouterLink, RouterView, useRoute } from 'vue-router'
 import { onMounted, ref, computed, onUpdated } from 'vue'
 import axios from 'axios'
+import TransitionNavMenu from './components/TransitionNavMenu.vue'
 
 const lvl1Categories = ref([])
 const lvl2Categories = ref([])
 const lvl3Categories = ref([])
-const categoryNavList = ref(null)
-const categoryWrapper = ref(null)
 const route = useRoute()
 
 onMounted(() => {
@@ -117,25 +116,23 @@ function currentCategory(category1ID){
   </header>
 
   <div class="mt-32">
-    <Transition name="nav-menu">
-      <div class="w-[20%] float-left ml-6 bg-blue-200 rounded-lg transition-all duration-200 overflow-hidden" ref="categoryWrapper">
-        <ul class="text-sm category-nav-list" ref="categoryNavList">
+      <div class="w-[20%] float-left ml-6 bg-blue-200 rounded-lg">
+        <ul class="text-sm">
           <li v-for="category1 in lvl1Categories" class="border-b rounded-lg">
             <RouterLink :to="'/products/' + category1.category1Name + '/' + category1.category1ID" class="h-full w-full block p-3 category-item rounded-lg transition-all">{{ category1.category1Name }}</RouterLink>
-            <ul v-if="hasCategory2(category1.category1ID)" v-show="currentCategory(category1.category1ID)">
-              <li v-for="category2 in lvl2ByID(category1.category1ID)">
-                <p class="pl-4 category-item p-2 rounded-lg transition-all">- {{ category2.category2Name }}</p>
-                  <ul v-if="hasCategory3(category2.category2ID)">
-                    <li v-for="category3 in lvl3ByID(category2.category2ID)">
-                      <p class="pl-8 category-item p-2 rounded-lg transition-all">- {{ category3.category3Name }}</p>
-                    </li>
-                  </ul>
-              </li>
-            </ul>
+              <ul v-if="hasCategory2(category1.category1ID)" v-show="currentCategory(category1.category1ID)">
+                <li v-for="category2 in lvl2ByID(category1.category1ID)">
+                  <p class="pl-4 category-item p-2 rounded-lg transition-all">- {{ category2.category2Name }}</p>
+                    <ul v-if="hasCategory3(category2.category2ID)">
+                      <li v-for="category3 in lvl3ByID(category2.category2ID)">
+                        <p class="pl-8 category-item p-2 rounded-lg transition-all">- {{ category3.category3Name }}</p>
+                      </li>
+                    </ul>
+                </li>
+              </ul>                      
           </li>
         </ul>
       </div>
-    </Transition>
     
     <div class="max-w-[75%] w-[75%] float-right bg-blue-100 ml-3 mr-6 rounded-lg">
       <router-view v-slot="{ Component }">
@@ -159,9 +156,6 @@ function currentCategory(category1ID){
   background-color: rgba(138, 172, 233, 0.659);
   cursor: pointer;
 }
-.category-nav-list{
-
-}
 
 /* Router Trainsitions */
 .fade-enter-active,
@@ -172,16 +166,5 @@ function currentCategory(category1ID){
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-}
-
-.nav-menu-enter-active,
-.nav-menu-leave-active {
-  transition: all 0.5s ease;
-  max-height: 1500px;
-}
-
-.nav-menu-enter-from,
-.nav-menu-leave-to {
-  max-height: 0;
 }
 </style>
