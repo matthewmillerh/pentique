@@ -21,21 +21,9 @@ SET time_zone = "+00:00";
 -- Database: `f5140715_pentiquedb`
 --
 
-DELIMITER $$
---
--- Procedures
---
-CREATE DEFINER=`f5140715`@`localhost` PROCEDURE `admin_login` (`admin_login_email` VARCHAR(45), `admin_login_password` VARCHAR(45))   BEGIN
-SELECT
-  administratorID,
-  administratorName,
-  administratorSurname
-FROM administrator
-WHERE BINARY administratorEmail = admin_login_email
-AND BINARY administratorPassword = admin_login_password;
-END$$
+CREATE DATABASE pentiquedb
 
-DELIMITER ;
+USE pentiquedb
 
 -- --------------------------------------------------------
 

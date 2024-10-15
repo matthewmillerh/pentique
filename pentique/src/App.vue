@@ -106,35 +106,46 @@ function currentCategory(category1ID){
       <div class="rounded-lg bg-blue-200 bg-opacity-60 flex justify-center items-center flex-wrap fixed top-5 left-6 right-6 z-50 p-3">
         <img alt="Pentique logo" src="/images/logo.png" width="100" />
         <nav class="p-2">
-          <RouterLink class="p-4 main-nav-link" to="/">Home</RouterLink>
-          <RouterLink class="p-4 main-nav-link" to="/about">About</RouterLink>
-          <RouterLink class="p-4 main-nav-link" to="/contact">Contact</RouterLink>
-          <RouterLink class="p-4 main-nav-link" to="/shipping">Shipping</RouterLink>
+          <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/">Home</RouterLink>
+          <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/about">About</RouterLink>
+          <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/contact">Contact</RouterLink>
+          <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/shipping">Shipping</RouterLink>
         </nav>
       </div>
     </div>
   </header>
 
   <div class="mt-32">
-      <div class="w-[20%] float-left ml-6 bg-blue-200 rounded-lg">
+      <div class="max-w-[20%] float-left ml-6 bg-blue-200 rounded-lg">
+        <!-- Main nav list for level 1 categories-->
         <ul class="text-sm">
           <li v-for="category1 in lvl1Categories" class="border-b rounded-lg">
             <RouterLink :to="'/products/' + category1.category1Name + '/' + category1.category1ID" class="h-full w-full block p-3 category-item rounded-lg transition-all">{{ category1.category1Name }}</RouterLink>
-              <ul v-if="hasCategory2(category1.category1ID)" v-show="currentCategory(category1.category1ID)">
+            
+            <!-- Div wrapper for grid transition-->
+             <div class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-200" v-bind:class="{ 'nav-active': currentCategory(category1.category1ID) }" aria-hidden="false">
+              <div class="overflow-hidden">
+                <!-- Nav list for level 2 categories -->
+                <ul v-if="hasCategory2(category1.category1ID)">
                 <li v-for="category2 in lvl2ByID(category1.category1ID)">
-                  <p class="pl-4 category-item p-2 rounded-lg transition-all">- {{ category2.category2Name }}</p>
+                  <RouterLink :to="'/products/' + category1.category1Name + '/' + category1.category1ID + '/' + category2.category2Name" class="pl-4 category-item p-2 rounded-lg transition-all block">- {{ category2.category2Name }}</RouterLink>
+
+                  <!-- Nav list for level 3 categories -->
                     <ul v-if="hasCategory3(category2.category2ID)">
                       <li v-for="category3 in lvl3ByID(category2.category2ID)">
                         <p class="pl-8 category-item p-2 rounded-lg transition-all">- {{ category3.category3Name }}</p>
                       </li>
                     </ul>
                 </li>
-              </ul>                      
+              </ul>
+              </div>
+             </div>
+                                  
           </li>
         </ul>
       </div>
     
-    <div class="max-w-[75%] w-[75%] float-right bg-blue-100 ml-3 mr-6 rounded-lg">
+    <div class="max-w-[70%] w-[70%] float-right bg-blue-100 mr-6 rounded-lg">
       <router-view v-slot="{ Component }">
           <component :is="Component" />
       </router-view>
@@ -147,14 +158,17 @@ function currentCategory(category1ID){
 <style scoped>
 .router-link-active {
   color: black;
-  text-shadow: 0px 0px 1px black;
+  font-weight: bold;
 }
 .main-nav-link:hover{
-  text-shadow: 0px 0px 1px black;
+  
 }
 .category-item:hover{
   background-color: rgba(138, 172, 233, 0.659);
   cursor: pointer;
+}
+.nav-active {
+  grid-template-rows: 1fr;
 }
 
 /* Router Trainsitions */

@@ -2,6 +2,7 @@ import express from "express";
 
 //import product functions from controller
 import {
+  showProductsByCategory,
   showProducts,
   showProductById,
   createProduct,
@@ -19,6 +20,9 @@ import {
 
 //init express router
 const router = express.Router();
+
+//get products buy category1ID
+router.get("/products-by-category/:category1ID", showProductsByCategory)
 
 //get all products
 router.get("/products", showProducts);

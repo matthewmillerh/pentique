@@ -1,5 +1,6 @@
 //import functions from Product model
 import {
+    getProductsByCategory,
     getProducts,
     getProductById,
     insertProduct,
@@ -7,6 +8,17 @@ import {
     deleteProductById,
   } from "../models/productModel.js";
   
+  //get products by category1ID
+  export const showProductsByCategory = (req, res) => {
+    getProductsByCategory(req.params.category1ID, (err, results) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.json(results);
+      }
+    })
+  }
+
   //get all products
   export const showProducts = (req, res) => {
     getProducts((err, results) => {

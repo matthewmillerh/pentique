@@ -31,7 +31,7 @@ const router = createRouter({
       component: ShippingView
     },
     {
-      path: '/products/:category/:id',
+      path: '/products/:category1/:id/:category2?/:category3?',
       name: 'products',
       component: ProductsView
     }
