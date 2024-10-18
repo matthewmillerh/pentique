@@ -28,7 +28,7 @@ export const getProducts = (result) => {
 //get single product
 export const getProductById = (id, result) => {
   db.query(
-    "SELECT * FROM PRODUCT WHERE productID = ?",
+    "SELECT product.*, category1.category1Name, category2.category2Name, category3.category3Name FROM product LEFT OUTER JOIN category1 ON category1.category1ID = product.category1ID LEFT OUTER JOIN category2 ON category2.category2ID = product.category2ID LEFT OUTER JOIN category3 ON category3.category3ID = product.category3ID WHERE productID = ?",
     [id],
     (err, results) => {
       if (err) {

@@ -30,7 +30,7 @@ import {
     });
   };
   
-  //get single product
+  //Get a single product by productID
   export const showProductById = (req, res) => {
     getProductById(req.params.id, (err, results) => {
       if (err) {

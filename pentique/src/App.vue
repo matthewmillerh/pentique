@@ -96,14 +96,15 @@ function lvl3ByID (category2ID){
 
 //shows the subcategories of the currently selected category
 function currentCategory(category1ID){
-  return (category1ID == route.params.id) ? true : false
+  return (category1ID == route.params.category1ID) ? true : false
 }
 </script>
 
 <template>
   <header>
     <div class="fixed top-0 left-0 right-0 bg-white h-28 backdrop-blur bg-opacity-50">
-      <div class="rounded-lg bg-blue-200 bg-opacity-60 flex justify-center items-center flex-wrap fixed top-5 left-6 right-6 z-50 p-3">
+      <div class="rounded-lg bg-blue-200 bg-opacity-60 flex justify-center items-center flex-wrap fixed top-5 left-6 right-6 z-50 p-3 
+      border border-blue-300 shadow shadow-blue-100">
         <img alt="Pentique logo" src="/images/logo.png" width="100" />
         <nav class="p-2">
           <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/">Home</RouterLink>
@@ -115,20 +116,22 @@ function currentCategory(category1ID){
     </div>
   </header>
 
-  <div class="mt-32">
-      <div class="max-w-[20%] float-left ml-6 bg-blue-200 rounded-lg">
+  <div class="mt-28">
+      <div class="max-w-[17%] w-[17%] float-left bg-blue-200 rounded-lg border border-blue-300 shadow">
         <!-- Main nav list for level 1 categories-->
         <ul class="text-sm">
           <li v-for="category1 in lvl1Categories" class="border-b rounded-lg">
             <RouterLink :to="'/products/' + category1.category1Name + '/' + category1.category1ID" class="h-full w-full block p-3 category-item rounded-lg transition-all">{{ category1.category1Name }}</RouterLink>
             
             <!-- Div wrapper for grid transition-->
-             <div class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-200" v-bind:class="{ 'nav-active': currentCategory(category1.category1ID) }" aria-hidden="false">
+             <Transition>
+              <div class="grid grid-rows-[1fr]" v-show="currentCategory(category1.category1ID)">
               <div class="overflow-hidden">
+                
                 <!-- Nav list for level 2 categories -->
                 <ul v-if="hasCategory2(category1.category1ID)">
                 <li v-for="category2 in lvl2ByID(category1.category1ID)">
-                  <RouterLink :to="'/products/' + category1.category1Name + '/' + category1.category1ID + '/' + category2.category2Name" class="pl-4 category-item p-2 rounded-lg transition-all block">- {{ category2.category2Name }}</RouterLink>
+                  <RouterLink :to="'/products/' + category2.category2Name + '/' + category1.category1ID" class="pl-4 category-item p-2 rounded-lg transition-all block">- {{ category2.category2Name }}</RouterLink>
 
                   <!-- Nav list for level 3 categories -->
                     <ul v-if="hasCategory3(category2.category2ID)">
@@ -140,12 +143,17 @@ function currentCategory(category1ID){
               </ul>
               </div>
              </div>
+             </Transition>
+             <!--
+              transition-[grid-template-rows] duration-200
+              v-bind:class="{ 'nav-active': currentCategory(category1.category1ID) }"
+             -->
                                   
           </li>
         </ul>
       </div>
     
-    <div class="max-w-[70%] w-[70%] float-right bg-blue-100 mr-6 rounded-lg">
+    <div class="max-w-[80%] w-[80%] float-right bg-blue-100 rounded-lg border border-blue-300 shadow">
       <router-view v-slot="{ Component }">
           <component :is="Component" />
       </router-view>
@@ -158,7 +166,7 @@ function currentCategory(category1ID){
 <style scoped>
 .router-link-active {
   color: black;
-  font-weight: bold;
+  font-weight: 600;
 }
 .main-nav-link:hover{
   
@@ -167,18 +175,15 @@ function currentCategory(category1ID){
   background-color: rgba(138, 172, 233, 0.659);
   cursor: pointer;
 }
-.nav-active {
-  grid-template-rows: 1fr;
-}
 
 /* Router Trainsitions */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
+.v-enter-active,
+.v-leave-active {
+  transition: grid-template-rows 0.3s ease;
 }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+.v-enter-from,
+.v-leave-to {
+  grid-template-rows: 0fr;
 }
 </style>
