@@ -46,13 +46,13 @@ async function getProductByID() {
           >
         </div>
       </div>
-      <div class="rounded-lg">
+      <div class="rounded-lg p-4 border max-w-48">
         <img :src="'/images/' + product.category1Name + '/' + (product.category2Name ? product.category2Name + '/' : '') + (product.category3Name ? product.category3Name + '/' : '') + product.productFileName" 
         class="max-w-full max-h-full self-center" 
         alt="Product Image"
         >
       </div>
-      <div class="pl-4">
+      <div class="pl-4 max-w-32">
         <span v-html="product.productDescription"></span>
       </div>
     </div>    
