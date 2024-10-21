@@ -29,27 +29,32 @@ async function getProductByID() {
       <div class="h-full grid grid-rows-3 grid-cols-1 w-28 mr-4 rounded-lg">
         <div class="flex justify-center p-2 border border-blue-300 rounded-lg mb-1">
           <img :src="'/images/' + product.category1Name + '/' + (product.category2Name ? product.category2Name + '/' : '') + (product.category3Name ? product.category3Name + '/' : '') + product.productFileName" 
-            class="max-w-full max-h-full self-center rounded" 
+            class="max-w-full max-h-full self-center" 
             alt="Product Image"
           >
         </div>
         <div class="flex justify-center p-2 border border-blue-300 rounded-lg mt-1 mb-1">
           <img :src="'/images/' + product.category1Name + '/' + (product.category2Name ? product.category2Name + '/' : '') + (product.category3Name ? product.category3Name + '/' : '') + product.productFileName" 
-            class="max-w-full max-h-full self-center rounded" 
+            class="max-w-full max-h-full self-center" 
             alt="Product Image"
           >
         </div>
         <div class="flex justify-center p-2 border border-blue-300 rounded-lg mt-1">
           <img :src="'/images/' + product.category1Name + '/' + (product.category2Name ? product.category2Name + '/' : '') + (product.category3Name ? product.category3Name + '/' : '') + product.productFileName" 
-            class="max-w-full max-h-full self-center rounded" 
+            class="max-w-full max-h-full self-center" 
             alt="Product Image"
           >
         </div>
       </div>
-      <img :src="'/images/' + product.category1Name + '/' + (product.category2Name ? product.category2Name + '/' : '') + (product.category3Name ? product.category3Name + '/' : '') + product.productFileName" 
-        class="max-w-full max-h-full self-center rounded-lg" 
+      <div class="rounded-lg">
+        <img :src="'/images/' + product.category1Name + '/' + (product.category2Name ? product.category2Name + '/' : '') + (product.category3Name ? product.category3Name + '/' : '') + product.productFileName" 
+        class="max-w-full max-h-full self-center" 
         alt="Product Image"
-      >
+        >
+      </div>
+      <div class="pl-4">
+        <span v-html="product.productDescription"></span>
+      </div>
     </div>    
   </div>
   

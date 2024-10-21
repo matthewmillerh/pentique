@@ -6,12 +6,13 @@ import ProductCard from '@/components/ProductCard.vue'
 
 const subCategories = ref([])
 const products = ref(null)
+const filteredProducts = ref(null)
 const route = useRoute()
 const currentCategory = ref (null)
 
 onMounted (() => {
   setTimeout(() => getProductsByCategory(), 500)
-  setTimeout(() => currentCategory.value = route.params.category, 500)
+  currentCategory.value = route.params.category
 })
 
 //get all products for the current level 1 category
@@ -19,6 +20,7 @@ async function getProductsByCategory() {
   try {
     const response = await axios.get("http://localhost:5000/products-by-category/" + route.params.category1ID)
     products.value = response.data
+    filteredProducts.value = products.value.filter(filterProducts)
   } catch (err) {
     console.log(err)
   }
@@ -32,20 +34,22 @@ watch(() => route.params.category1ID, () => {
 
 //Change which category products are shown when the route params change
 watch (() => route.params.category, () => {
-  setTimeout(() => currentCategory.value = route.params.category, 500)
+  currentCategory.value = route.params.category
+
+  filteredProducts.value = products.value.filter(filterProducts)
 })
+
+function filterProducts(product){
+   return product.category1Name === currentCategory.value || product.category2Name === currentCategory.value || product.category3Name === currentCategory.value
+ }
 
 </script>
 <template>
   <div>
     <h1 class="text-lg font-semibold p-3 text-center">{{ currentCategory }}</h1>
     <div class="flex flex-wrap gap-5 justify-center p-4">
-      <div v-for="product in products">
-        <ProductCard v-if="
-          product.category1Name === currentCategory || 
-          product.category2Name === currentCategory ||
-          product.category3Name === currentCategory
-        " 
+      <div v-for="product in filteredProducts">
+        <ProductCard
         :category1-name="product.category1Name" :category2-name="product.category2Name" :category3-name="product.category3Name" :product-name="product.productName" 
         :image-u-r-l="product.productFileName"
         :product-price="product.productPrice" :product-availability="product.productStockStatus" :productID="product.productID" :category1ID="product.category1ID">
