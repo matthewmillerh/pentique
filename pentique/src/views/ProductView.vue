@@ -21,6 +21,15 @@ async function getProductByID() {
   }
 }
 
+function formatPrice(price){
+let formattedPrice = new Intl.NumberFormat('en-ZA', {
+  style: 'currency',
+  currency: 'Rand'
+})
+
+return formattedPrice
+}
+
 </script>
 <template>
   <div>
@@ -46,13 +55,16 @@ async function getProductByID() {
           >
         </div>
       </div>
-      <div class="rounded-lg p-4 border max-w-48">
+      <div class="rounded-lg p-4 border max-w-44 border-blue-300">
         <img :src="'/images/' + product.category1Name + '/' + (product.category2Name ? product.category2Name + '/' : '') + (product.category3Name ? product.category3Name + '/' : '') + product.productFileName" 
         class="max-w-full max-h-full self-center" 
         alt="Product Image"
         >
       </div>
-      <div class="pl-4 max-w-32">
+      <div class="block">
+        <span class="font-semibold">R {{ formatPrice(product.productPrice) }}</span>
+      </div>
+      <div class="pl-4 max-w-60">
         <span v-html="product.productDescription"></span>
       </div>
     </div>    
