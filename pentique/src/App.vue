@@ -2,22 +2,27 @@
 import { RouterLink, RouterView, useRoute } from 'vue-router'
 import { onMounted, ref, computed, onUpdated } from 'vue'
 import axios from 'axios'
-import TransitionNavMenu from './components/TransitionNavMenu.vue'
 
 const lvl1Categories = ref([])
 const lvl2Categories = ref([])
 const lvl3Categories = ref([])
 const route = useRoute()
+const cartItemCount = ref(0)
 
 onMounted(() => {
   //get all top level product categories
   getCategories()
+
+  setCartItemCount()
 })
 
-onUpdated(() => {
-
-
-}) 
+//Set the value of cartItemCount to show and update the amount of items currently in the cart
+function setCartItemCount(){
+  cartItemCount.value = JSON.parse(localStorage.getItem('cart')).length
+  window.addEventListener('item-added-to-cart', (event) => {
+    cartItemCount.value = event.detail.storage.length;
+  })
+}
 
 //get all level 1, 2 and 3 categories from the database
 async function getCategories() {
@@ -111,6 +116,7 @@ function currentCategory(category1ID){
           <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/about">About</RouterLink>
           <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/contact">Contact</RouterLink>
           <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/shipping">Shipping</RouterLink>
+          <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/cart">View Cart (<span class="text-sm font-semibold">{{ cartItemCount }}</span>)</RouterLink>
         </nav>
       </div>
     </div>

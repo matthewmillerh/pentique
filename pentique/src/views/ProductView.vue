@@ -8,34 +8,62 @@ const route = useRoute()
 
 onMounted (() => {
   getProductByID()
+
+  //Create a cart in localStorage if it doesn't already exist
+  createCart()
 })
+
+//Create a cart item in localStorage to store productID's 
+function createCart(){
+  if(!localStorage.getItem('cart')){
+    localStorage.setItem('cart', '[]')
+  }
+}
 
 //Get the product by the supplied productID
 async function getProductByID() {
   try {
     const response = await axios.get("http://localhost:5000/products/" + route.params.productID)
     product.value = response.data
-    console.log(product.value)
   } catch (err) {
     console.log(err)
   }
 }
 
-function formatPrice(price){
-let formattedPrice = new Intl.NumberFormat('en-ZA', {
+//Format the price to Rand format
+const formatter = new Intl.NumberFormat('en-ZA', {
   style: 'currency',
-  currency: 'Rand'
+  currency: 'ZAR'
 })
 
-return formattedPrice
+function addToCart(){
+  let cart = JSON.parse(localStorage.getItem('cart'))
+
+  if(cart.length == 0){
+    cart.push(product.value.productID)
+  } else {
+    if(!cart.find((item) => item == product.value.productID)){
+      cart.push(product.value.productID)
+    }
+  }
+
+  //Save the cart to localStorage
+  localStorage.setItem('cart', JSON.stringify(cart))
+
+  //create an event to update the cartItemCount
+  window.dispatchEvent(new CustomEvent('item-added-to-cart', {
+    detail: {
+      storage: JSON.parse(localStorage.getItem('cart'))
+    }
+  }))
 }
 
 </script>
 <template>
   <div>
-    <h1 class="text-lg font-semibold p-3 text-center">{{ product.productName }}</h1>
-    <div class="flex flex-wrap justify-left p-6 h-96">
-      <div class="h-full grid grid-rows-3 grid-cols-1 w-28 mr-4 rounded-lg">
+    <h1 class="text-lg font-semibold pl-6 pb-0 pt-3">{{ product.productName }}</h1>
+    <div class="flex flex-wrap justify-left p-6">
+      <div class="h-[350px] grid grid-rows-3 grid-cols-1 w-28 mr-4 rounded-lg">
         <div class="flex justify-center p-2 border border-blue-300 rounded-lg mb-1">
           <img :src="'/images/' + product.category1Name + '/' + (product.category2Name ? product.category2Name + '/' : '') + (product.category3Name ? product.category3Name + '/' : '') + product.productFileName" 
             class="max-w-full max-h-full self-center" 
@@ -55,18 +83,23 @@ return formattedPrice
           >
         </div>
       </div>
-      <div class="rounded-lg p-4 border max-w-44 border-blue-300">
+      <div class="rounded-lg p-4 border max-w-44 h-[350px] border-blue-300">
         <img :src="'/images/' + product.category1Name + '/' + (product.category2Name ? product.category2Name + '/' : '') + (product.category3Name ? product.category3Name + '/' : '') + product.productFileName" 
         class="max-w-full max-h-full self-center" 
         alt="Product Image"
         >
       </div>
-      <div class="block">
-        <span class="font-semibold">R {{ formatPrice(product.productPrice) }}</span>
+      <div class="ml-4">
+        <div class="h-7">
+          <span class="font-semibold text-xl">{{ formatter.format(product.productPrice) }}</span>
+        </div>
+        <button class="mt-3 bg-green-500 rounded p-2 text-sm font-semibold" @click="addToCart">Add to Cart</button>
+        <div class="mt-4 max-w-60">
+          <p class="text-sm font-semibold">Product Information</p>
+          <p v-html="product.productDescription" class="pt-3 text-sm"></p>
+        </div>
       </div>
-      <div class="pl-4 max-w-60">
-        <span v-html="product.productDescription"></span>
-      </div>
+      
     </div>    
   </div>
   
