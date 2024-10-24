@@ -18,10 +18,20 @@ onMounted(() => {
 
 //Set the value of cartItemCount to show and update the amount of items currently in the cart
 function setCartItemCount(){
+
+  //create a cart entry in localStorage if it does not exist
+  if(!localStorage.getItem('cart')){
+    localStorage.setItem('cart', '[]')
+  }
+
   cartItemCount.value = JSON.parse(localStorage.getItem('cart')).length
+
+  //Create an event listener to update cartItemCount when an item is added to the cart in localStorage
   window.addEventListener('item-added-to-cart', (event) => {
     cartItemCount.value = event.detail.storage.length;
   })
+  
+  
 }
 
 //get all level 1, 2 and 3 categories from the database
@@ -116,18 +126,18 @@ function currentCategory(category1ID){
           <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/about">About</RouterLink>
           <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/contact">Contact</RouterLink>
           <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/shipping">Shipping</RouterLink>
-          <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/cart">View Cart (<span class="text-sm font-semibold">{{ cartItemCount }}</span>)</RouterLink>
+          <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/shopping-cart">View Cart (<span class="text-sm font-semibold">{{ cartItemCount }}</span>)</RouterLink>
         </nav>
       </div>
     </div>
   </header>
 
   <div class="mt-28">
-      <div class="max-w-[17%] w-[17%] float-left bg-blue-200 rounded-lg border border-blue-300 shadow">
+      <div class="max-w-[17%] w-[17%] fixed bg-blue-200 rounded-lg border border-blue-300 shadow max-h-[80%] overflow-y-auto">
         <!-- Main nav list for level 1 categories-->
         <ul class="text-sm">
           <li v-for="category1 in lvl1Categories" class="border-b rounded-lg">
-            <RouterLink :to="'/products/' + category1.category1Name + '/' + category1.category1ID" class="h-full w-full block p-3 category-item rounded-lg transition-all">{{ category1.category1Name }}</RouterLink>
+            <RouterLink :to="'/products/' + category1.category1Name + '/' + category1.category1ID" class="h-full w-full block px-3 py-1 category-item rounded-lg transition-all">{{ category1.category1Name }}</RouterLink>
             
             <!-- Div wrapper for grid transition-->
              <Transition>
@@ -137,24 +147,19 @@ function currentCategory(category1ID){
                 <!-- Nav list for level 2 categories -->
                 <ul v-if="hasCategory2(category1.category1ID)">
                 <li v-for="category2 in lvl2ByID(category1.category1ID)">
-                  <RouterLink :to="'/products/' + category2.category2Name + '/' + category1.category1ID" class="pl-4 category-item p-2 rounded-lg transition-all block">- {{ category2.category2Name }}</RouterLink>
+                  <RouterLink :to="'/products/' + category2.category2Name + '/' + category1.category1ID" class="pl-4 category-item pr-2 py-1 rounded-lg transition-all block">- {{ category2.category2Name }}</RouterLink>
 
                   <!-- Nav list for level 3 categories -->
                     <ul v-if="hasCategory3(category2.category2ID)">
                       <li v-for="category3 in lvl3ByID(category2.category2ID)">
-                        <p class="pl-8 category-item p-2 rounded-lg transition-all">- {{ category3.category3Name }}</p>
+                        <RouterLink :to="'/products/' + category3.category3Name + '/' + category1.category1ID" class="pl-8 category-item pr-2 py-1 rounded-lg transition-all block">- {{ category3.category3Name }}</RouterLink>
                       </li>
                     </ul>
                 </li>
               </ul>
               </div>
              </div>
-             </Transition>
-             <!--
-              transition-[grid-template-rows] duration-200
-              v-bind:class="{ 'nav-active': currentCategory(category1.category1ID) }"
-             -->
-                                  
+             </Transition>                                  
           </li>
         </ul>
       </div>
@@ -191,5 +196,27 @@ function currentCategory(category1ID){
 .v-enter-from,
 .v-leave-to {
   grid-template-rows: 0fr;
+}
+
+/* Scrollbar width */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Scrollbar Track */
+::-webkit-scrollbar-track {
+    background: rgb(179, 179, 243);
+    border-radius: 8px;
+}
+
+/* Scrollbar Handle */
+::-webkit-scrollbar-thumb {
+    background: rgb(157, 157, 235);
+    border-radius: 5px;
+}
+
+/* Scrollbar Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(130, 130, 249);
 }
 </style>

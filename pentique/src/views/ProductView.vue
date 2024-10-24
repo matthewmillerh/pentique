@@ -2,16 +2,26 @@
 import { onMounted, onUpdated, ref, watch } from 'vue'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
+import NotificationPopup from '@/components/NotificationPopup.vue';
 
 const product = ref({})
 const route = useRoute()
+const addedToCart = ref(0)
 
 onMounted (() => {
   getProductByID()
 
   //Create a cart in localStorage if it doesn't already exist
   createCart()
+
+  //Scroll to the top of the page when displaying a product
+  scrollToTop()
 })
+
+//scrolls the page to the top
+function scrollToTop(){
+  window.scrollTo(0,0)
+}
 
 //Create a cart item in localStorage to store productID's 
 function createCart(){
@@ -36,15 +46,19 @@ const formatter = new Intl.NumberFormat('en-ZA', {
   currency: 'ZAR'
 })
 
+//Adds the product to the cart in localStorage
 function addToCart(){
   let cart = JSON.parse(localStorage.getItem('cart'))
 
-  if(cart.length == 0){
-    cart.push(product.value.productID)
+  //Only add the item to the cart if it does not already exist in the cart
+  if(cart.length == 0 || !cart.find((item) => item.productID == product.value.productID)){
+    cart.push({ productID: product.value.productID, quantity: 1 })
+
+    //show cart success message
+    showCartPopup(1)
   } else {
-    if(!cart.find((item) => item == product.value.productID)){
-      cart.push(product.value.productID)
-    }
+    //show cart warning message
+    showCartPopup(2)
   }
 
   //Save the cart to localStorage
@@ -56,6 +70,14 @@ function addToCart(){
       storage: JSON.parse(localStorage.getItem('cart'))
     }
   }))
+
+  
+}
+
+//show cart popup notification
+function showCartPopup(value){
+  addedToCart.value = value
+  setTimeout(() => addedToCart.value = 0, 3000)
 }
 
 </script>
@@ -83,7 +105,7 @@ function addToCart(){
           >
         </div>
       </div>
-      <div class="rounded-lg p-4 border max-w-44 h-[350px] border-blue-300">
+      <div class="rounded-lg p-4 border max-w-64 h-[350px] border-blue-300">
         <img :src="'/images/' + product.category1Name + '/' + (product.category2Name ? product.category2Name + '/' : '') + (product.category3Name ? product.category3Name + '/' : '') + product.productFileName" 
         class="max-w-full max-h-full self-center" 
         alt="Product Image"
@@ -93,7 +115,7 @@ function addToCart(){
         <div class="h-7">
           <span class="font-semibold text-xl">{{ formatter.format(product.productPrice) }}</span>
         </div>
-        <button class="mt-3 bg-green-500 rounded p-2 text-sm font-semibold" @click="addToCart">Add to Cart</button>
+        <button class="mt-3 bg-green-400 border border-green-500 rounded p-2 text-sm font-semibold shadow-lg" @click="addToCart">Add to Cart</button>
         <div class="mt-4 max-w-60">
           <p class="text-sm font-semibold">Product Information</p>
           <p v-html="product.productDescription" class="pt-3 text-sm"></p>
@@ -102,8 +124,25 @@ function addToCart(){
       
     </div>    
   </div>
+  <Transition>
+    <NotificationPopup message="Item Added to Cart" type="success" v-if="addedToCart == 1"></NotificationPopup>
+  </Transition>
+  <Transition>
+    <NotificationPopup message="Item Already In Cart" type="warning" v-if="addedToCart == 2"></NotificationPopup>
+  </Transition>
+  
   
 </template>
 
 <style>
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.5s ease-in-out;
+}
+
+.v-enter-from,
+.v-leave-to {
+  transform: translateX(150px);
+  opacity: 0;
+}
 </style>
