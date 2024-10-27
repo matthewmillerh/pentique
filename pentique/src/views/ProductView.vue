@@ -2,7 +2,8 @@
 import { onMounted, onUpdated, ref, watch } from 'vue'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
-import NotificationPopup from '@/components/NotificationPopup.vue';
+import NotificationPopup from '@/components/NotificationPopup.vue'
+import { formatter } from '@/scripts/global.js'
 
 const product = ref({})
 const route = useRoute()
@@ -39,12 +40,6 @@ async function getProductByID() {
     console.log(err)
   }
 }
-
-//Format the price to Rand format
-const formatter = new Intl.NumberFormat('en-ZA', {
-  style: 'currency',
-  currency: 'ZAR'
-})
 
 //Adds the product to the cart in localStorage
 function addToCart(){
