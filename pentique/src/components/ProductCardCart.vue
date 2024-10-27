@@ -3,20 +3,14 @@ import { formatter } from '@/scripts/global.js'
 import { onMounted, ref, toRefs } from 'vue'
 
 const props = defineProps(['category1Name', 'category2Name', 'category3Name', 'imageURL', 'productName', 'productPrice', 'productQuantity', 'productID', 'category1ID', 'index'])
-const currentItemEdited = ref()
-const active = ref(false)
 const quantityCurrentValue = ref(null)
 const { productQuantity } = toRefs(props)
 
 onMounted(() => {
+
+    //set the initial quantity for the product from the value in the cart
     quantityCurrentValue.value = productQuantity.value
 })
-
-function showUpdateBtn(id){
-    currentItemEdited.value = id
-    active.value = true
-    console.log(productQuantity.value + ' ' + quantityCurrentValue.value)
-}
 
 </script>
 
@@ -33,10 +27,13 @@ function showUpdateBtn(id){
         </RouterLink>
         <div class="flex items-start flex-col w-96 ml-4">
             <div class="w-full"><span class="text-sm">Price:</span> <span class="font-semibold text-sm">{{ formatter.format(productPrice) }}</span></div>
-            <div><span class="text-sm">Quantity: <input @input="showUpdateBtn(productID)" type="text" class="px-1 rounded w-12" v-model="quantityCurrentValue" required></span></div>
-            <button :id="productID" class="rounded bg-green-300 border border-green-400 shadow-md text-sm font-semibold px-2 py-1 mt-3" v-show="active && productQuantity != quantityCurrentValue">Update</button>
-            <button class="rounded bg-red-300 border border-red-400 shadow-md text-sm font-semibold px-2 py-1 mt-4">Remove</button>
+            <div><span class="text-sm">Quantity: <input type="text" class="px-1 rounded w-12" v-model="quantityCurrentValue"></span></div>
+            <button @click="$emit('update-quantity', quantityCurrentValue, index)" class="rounded bg-green-300 border border-green-400 shadow-md text-sm font-semibold px-2 py-1 mt-3" v-show="productQuantity != quantityCurrentValue">
+                Update
+            </button>
+            <button class="rounded bg-red-300 border border-red-400 shadow-md text-sm font-semibold px-2 py-1 mt-4">
+                Remove
+            </button>
         </div>        
-    </div>
-    
+    </div>   
 </template>

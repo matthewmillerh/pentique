@@ -34,6 +34,14 @@ async function getProductByID(id, qty) {
     console.log(err)
   }
 }
+
+function updateQuantity(quantity, index){
+  products.value[index]['quantity'] = quantity
+
+  //Save the cart to localStorage
+  localStorage.setItem('cart', JSON.stringify(products.value))
+  console.log(products.value[index]['quantity'])
+}
 </script>
 <template>
     <h1 class="text-lg font-semibold p-3 text-center">Your Shopping Cart</h1>
@@ -42,7 +50,8 @@ async function getProductByID(id, qty) {
         <ProductCardCart
         :category1-name="product.category1Name" :category2-name="product.category2Name" :category3-name="product.category3Name" :product-name="product.productName" 
         :image-u-r-l="product.productFileName"
-        :product-price="product.productPrice" :product-quantity="product.quantity" :productID="product.productID" :category1ID="product.category1ID" :index="index">
+        :product-price="product.productPrice" :product-quantity="product.quantity" :productID="product.productID" :category1ID="product.category1ID" :index="index"
+        @update-quantity="updateQuantity">
         </ProductCardCart>     
       </div>
     </div>    
