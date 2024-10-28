@@ -126,7 +126,7 @@ function currentCategory(category1ID){
           <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/about">About</RouterLink>
           <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/contact">Contact</RouterLink>
           <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/shipping">Shipping</RouterLink>
-          <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/shopping-cart">View Cart (<span class="text-sm font-semibold">{{ cartItemCount }}</span>)</RouterLink>
+          <RouterLink class="p-4 main-nav-link rounded-lg transition-all" to="/shopping-cart">Shopping Cart (<span class="text-sm font-semibold">{{ cartItemCount }}</span>)</RouterLink>
         </nav>
       </div>
     </div>

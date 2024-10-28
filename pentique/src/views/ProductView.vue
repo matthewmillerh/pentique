@@ -3,7 +3,7 @@ import { onMounted, onUpdated, ref, watch } from 'vue'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
 import NotificationPopup from '@/components/NotificationPopup.vue'
-import { formatter } from '@/scripts/global.js'
+import { formatter, saveCart } from '@/scripts/global.js'
 
 const product = ref({})
 const route = useRoute()
@@ -56,17 +56,7 @@ function addToCart(){
     showCartPopup(2)
   }
 
-  //Save the cart to localStorage
-  localStorage.setItem('cart', JSON.stringify(cart))
-
-  //create an event to update the cartItemCount
-  window.dispatchEvent(new CustomEvent('item-added-to-cart', {
-    detail: {
-      storage: JSON.parse(localStorage.getItem('cart'))
-    }
-  }))
-
-  
+  saveCart(cart) 
 }
 
 //show cart popup notification
