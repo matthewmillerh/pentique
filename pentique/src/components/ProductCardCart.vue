@@ -1,18 +1,25 @@
 <script setup>
 import { formatter } from '@/scripts/global.js'
-import { onMounted, ref, toRefs } from 'vue'
+import { onMounted, ref, toRefs, computed, onUpdated } from 'vue'
 
 const props = defineProps(['category1Name', 'category2Name', 'category3Name', 'imageURL', 'productName', 'productPrice', 'productQuantity', 'productID', 'category1ID', 'index'])
 const quantityCurrentValue = ref(null)
 const { productQuantity, index } = toRefs(props)
 const updateButtonClicked = ref(false)
-const emit = defineEmits(['update-quantity', 'remove-from-cart'])
+const emit = defineEmits(['update-quantity', 'remove-from-cart', 'checkout-disabled'])
 const valid = ref(true)
 
-onMounted(() => {
+const checkoutDisabled = computed (() => {
+    return quantityCurrentValue.value !== productQuantity.value
+})
 
+onMounted(() => {
     //set the initial quantity for the product from the value in the cart
     quantityCurrentValue.value = productQuantity.value
+})
+
+onUpdated(() => {
+   // emit('checkout-disabled', checkoutDisabled.value)
 })
 
 //reset the quantity input box when focus is changed
@@ -20,7 +27,6 @@ function resetQuantityBox(){
     if(!updateButtonClicked.value){
         quantityCurrentValue.value = productQuantity.value
         valid.value = true
-        console.log('reset')
     }
 }
 
@@ -62,13 +68,24 @@ function validateQuantity(){
                     ({{ formatter.format(productPrice*productQuantity) }})
                 </span>
             </div>
-            <div><span class="text-sm">Quantity: <input type="text" class="px-1 rounded w-12" v-model="quantityCurrentValue" @focusout="resetQuantityBox()"></span></div>
+            <div class="mt-2">
+                <span class="text-sm">Quantity: 
+                    <input 
+                        type="text" 
+                        class="p-1 rounded w-16" 
+                        v-model="quantityCurrentValue" 
+                        @focusout="resetQuantityBox()"
+                        @input="$emit('checkout-disabled', checkoutDisabled)"
+                    >
+                </span>
+            </div>
             <p 
                 class="rounded-3xl bg-red-300 border border-red-400 shadow-lg px-2 text-sm mt-2"
-                v-show="!valid">Please enter a number</p>
-            <button @click="validateQuantity" 
+                v-show="!valid && productQuantity != quantityCurrentValue">Please enter a number</p>
+            <button 
+                @click="validateQuantity"
                 class="rounded bg-green-300 border border-green-400 shadow-md text-sm font-semibold px-2 py-1 mt-3" 
-                v-show="productQuantity != quantityCurrentValue"
+                v-if="productQuantity != quantityCurrentValue"
                 @mousedown="updateButtonClicked = true"
                 @mouseup="updateButtonClicked = false"
                 >

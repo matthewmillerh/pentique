@@ -164,7 +164,7 @@ function currentCategory(category1ID){
         </ul>
       </div>
     
-    <div class="max-w-[80%] w-[80%] float-right bg-blue-100 rounded-lg border border-blue-300 shadow">
+    <div class="max-w-[80%] w-[80%] float-right bg-blue-100 rounded-lg border border-blue-300 shadow mb-4">
       <router-view v-slot="{ Component }">
           <component :is="Component" />
       </router-view>
@@ -179,9 +179,7 @@ function currentCategory(category1ID){
   color: black;
   font-weight: 600;
 }
-.main-nav-link:hover{
-  
-}
+
 .category-item:hover{
   background-color: rgba(138, 172, 233, 0.659);
   cursor: pointer;
