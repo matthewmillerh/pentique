@@ -71,7 +71,7 @@ function validateQuantity(){
             <div class="mt-2">
                 <span class="text-sm">Quantity: 
                     <input 
-                        type="text" 
+                        type="text"
                         class="p-1 rounded w-16" 
                         v-model="quantityCurrentValue" 
                         @focusout="resetQuantityBox()"
