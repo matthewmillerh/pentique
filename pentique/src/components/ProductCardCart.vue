@@ -3,7 +3,7 @@ import { formatter } from '@/scripts/global.js'
 import { onMounted, ref, toRefs, computed, onUpdated } from 'vue'
 
 const props = defineProps(['category1Name', 'category2Name', 'category3Name', 'imageURL', 'productName', 'productPrice', 'productQuantity', 'productID', 'category1ID', 'index'])
-const quantityCurrentValue = ref(null)
+const quantityCurrentValue = ref(0)
 const { productQuantity, index } = toRefs(props)
 const updateButtonClicked = ref(false)
 const emit = defineEmits(['update-quantity', 'remove-from-cart', 'checkout-disabled'])
@@ -27,6 +27,7 @@ function resetQuantityBox(){
     if(!updateButtonClicked.value){
         quantityCurrentValue.value = productQuantity.value
         valid.value = true
+        emit('checkout-disabled', checkoutDisabled.value)
     }
 }
 
@@ -61,22 +62,24 @@ function validateQuantity(){
                 <span class="font-semibold text-sm">
                     {{ formatter.format(productPrice) }} 
                 </span>
-                <span class="text-sm">
-                    x{{ productQuantity }}
-                </span>
-                <span class="text-sm font-semibold">
-                    ({{ formatter.format(productPrice*productQuantity) }})
-                </span>
             </div>
             <div class="mt-2">
                 <span class="text-sm">Quantity: 
                     <input 
                         type="text"
-                        class="p-1 rounded w-16" 
+                        class="px-1 rounded w-16" 
                         v-model="quantityCurrentValue" 
                         @focusout="resetQuantityBox()"
                         @input="$emit('checkout-disabled', checkoutDisabled)"
                     >
+                </span>
+            </div>
+            <div class="mt-2">
+                <span class="text-sm">
+                    Subtotal:
+                </span>
+                <span class="text-sm font-semibold">
+                    {{ formatter.format(productPrice*productQuantity) }}
                 </span>
             </div>
             <p 

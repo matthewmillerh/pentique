@@ -133,11 +133,11 @@ function currentCategory(category1ID){
   </header>
 
   <div class="mt-28">
-      <div class="max-w-[17%] w-[17%] fixed bg-blue-200 rounded-lg border border-blue-300 shadow max-h-[80%] overflow-y-auto">
+      <div class="max-w-[17%] w-[17%] fixed bg-blue-200 rounded-lg border border-blue-300 shadow max-h-[80%] overflow-y-auto overflow-x-hidden">
         <!-- Main nav list for level 1 categories-->
         <ul class="text-sm">
           <li v-for="category1 in lvl1Categories" class="border-b rounded-lg">
-            <RouterLink :to="'/products/' + category1.category1Name + '/' + category1.category1ID" class="h-full w-full block px-3 py-1 category-item rounded-lg transition-all">{{ category1.category1Name }}</RouterLink>
+            <RouterLink :to="'/products/' + category1.category1Name + '/' + category1.category1ID" class="h-full w-full block px-3 py-2 category-item rounded-lg transition-all">{{ category1.category1Name }}</RouterLink>
             
             <!-- Div wrapper for grid transition-->
              <Transition>
@@ -150,11 +150,11 @@ function currentCategory(category1ID){
                   <RouterLink :to="'/products/' + category2.category2Name + '/' + category1.category1ID" class="pl-4 category-item pr-2 py-1 rounded-lg transition-all block">- {{ category2.category2Name }}</RouterLink>
 
                   <!-- Nav list for level 3 categories -->
-                    <ul v-if="hasCategory3(category2.category2ID)">
-                      <li v-for="category3 in lvl3ByID(category2.category2ID)">
-                        <RouterLink :to="'/products/' + category3.category3Name + '/' + category1.category1ID" class="pl-8 category-item pr-2 py-1 rounded-lg transition-all block">- {{ category3.category3Name }}</RouterLink>
-                      </li>
-                    </ul>
+                  <ul v-if="hasCategory3(category2.category2ID)">
+                    <li v-for="category3 in lvl3ByID(category2.category2ID)">
+                      <RouterLink :to="'/products/' + category3.category3Name + '/' + category1.category1ID" class="pl-8 category-item pr-2 py-1 rounded-lg transition-all block">- {{ category3.category3Name }}</RouterLink>
+                    </li>
+                  </ul>
                 </li>
               </ul>
               </div>

@@ -1,21 +1,40 @@
 <script setup>
-import { onMounted, ref, computed } from 'vue'
-import axios from 'axios'
+import { onBeforeMount, ref, computed } from 'vue'
 import ProductCardCart from '@/components/ProductCardCart.vue'
-import { saveCart, formatter } from '@/scripts/global'
+import { saveCart, formatter, getCart } from '@/scripts/global'
+import axios from 'axios'
 
 const shoppingCart = ref([])
 const products = ref([])
 const checkoutDisabled = ref(false)
 
-onMounted(() => {
-    getCart()
+onBeforeMount(() => {
+    shoppingCart.value = getCart()
     getProducts()
 })
 
-//get the cart from localStorage and calculate cart total
-function getCart(){
-  shoppingCart.value = JSON.parse(localStorage.getItem('cart'))
+//Get product information for each productID in the shopping cart
+function getProducts(){
+  shoppingCart.value.forEach(element => {
+      getProductByID(element.productID, element.quantity)
+  })
+}
+
+//Get the product from the database by the supplied productID
+async function getProductByID(id, qty) {
+    let productInfo = {}
+
+    try {
+      const response = await axios.get("http://localhost:5000/products/" + id)
+  
+      //add the quantity of the product in the cart to the product array
+      productInfo = response.data
+      productInfo['quantity'] = qty
+      products.value.push(productInfo)
+      //console.log(products.value)
+    } catch (err) {
+      console.log(err)
+    }
 }
 
 //Sets the total value of the shopping cart
@@ -27,28 +46,6 @@ const cartTotalValue = computed(() => {
    return cartTotal
 })
 
-//Get product information for each productID in the shopping cart
-function getProducts(){
-    shoppingCart.value.forEach(element => {
-        getProductByID(element.productID, element.quantity)
-    });
-}
-
-//Get the product by the supplied productID
-async function getProductByID(id, qty) {
-  try {
-    const response = await axios.get("http://localhost:5000/products/" + id)
-
-    //add the quantity of the product in the cart to the product array
-    let productInfo = {}
-    productInfo = response.data
-    productInfo['quantity'] = qty
-    products.value.push(productInfo)
-    //console.log(products.value)
-  } catch (err) {
-    console.log(err)
-  }
-}
 
 //update the quantity of an item in the cart
 function updateQuantity(quantity, index){
@@ -111,11 +108,17 @@ function setCheckoutButton(value){
           @click="emptyCart">
           Empty Cart
         </button>
-        <button 
-          class="rounded bg-green-300 border border-green-400 shadow-md px-2 py-1 text-sm font-semibold mr-3 disabled:bg-gray-300 disabled:border-gray-400 disabled:cursor-not-allowed"
-          :disabled="checkoutDisabled">
-          Continue to Checkout
-        </button>
+        <RouterLink
+          to="/checkout"
+          v-slot="{navigate}"
+          >
+            <button 
+              @click="navigate" 
+              class="rounded bg-green-300 border border-green-400 shadow-md px-2 py-1 text-sm font-semibold mr-3 disabled:bg-gray-300 disabled:border-gray-400 disabled:cursor-not-allowed"
+              :disabled="checkoutDisabled">
+                Continue to Checkout
+            </button>
+        </RouterLink>
       </div>
     </div>    
 </template>
