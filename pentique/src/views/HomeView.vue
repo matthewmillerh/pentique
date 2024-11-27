@@ -22,7 +22,9 @@
   <div class="ml-auto mr-auto">
     <div class="flex flex-wrap gap-4 justify-evenly p-4">
       <div v-for="item in items" :key="item.category1ID">
-        <ProductCategoryCard :category1Name="item.category1Name" :category2Name="item.category2Name" :category3Name="item.category3Name" :imageURL="item.productFileName"></ProductCategoryCard>
+        <RouterLink :to="'/products/' + item.category1Name + '/' + item.category1ID">
+          <ProductCategoryCard :category1Name="item.category1Name" :category2Name="item.category2Name" :category3Name="item.category3Name" :imageURL="item.productFileName"></ProductCategoryCard>
+        </RouterLink>         
       </div>
     </div>
   </div>

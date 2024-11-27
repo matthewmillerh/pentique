@@ -3,18 +3,16 @@ import { ref, onBeforeMount } from 'vue'
 import emailjs from '@emailjs/browser'
 import { getCart } from '@/scripts/global'
 import axios from 'axios'
+import router from '@/router';
 
 const deliveryMethod = ref(null)
 const form = ref(null)
-const inputFieldReset = ref(null)
 const shoppingCart = ref([])
 const products = ref([])
 
 onBeforeMount(() => {
     shoppingCart.value = getCart()
     getProducts()
-
-    console.log(products.value)
 })
 
 //Get product information for each productID in the shopping cart
@@ -34,8 +32,24 @@ async function getProductByID(id, qty) {
       //add the quantity of the product in the cart to the product array
       productInfo = response.data
       productInfo['quantity'] = qty
+
+      //remove unnecessary info
+      delete productInfo.productFileName
+      delete productInfo.category1ID
+      delete productInfo.category2ID
+      delete productInfo.category3ID
+      delete productInfo.productFeatured
+      delete productInfo.productSpecial
+      delete productInfo.productDescription
+      delete productInfo.productPosition1
+      delete productInfo.productPosition2
+      delete productInfo.productPosition3
+      delete productInfo.productHidden
+      delete productInfo.category1Name
+      delete productInfo.category2Name
+      delete productInfo.category3Name
+
       products.value.push(productInfo)
-      //console.log(products.value)
     } catch (err) {
       console.log(err)
     }
@@ -44,11 +58,14 @@ async function getProductByID(id, qty) {
 const sendMail = () => {
   emailjs.sendForm('service_qg7afqq', 'template_dpf5t2n', form.value, 'RyIXXr7-ppm95PWre')
   .then(() => {
-      alert('Message sent!')
-      inputFieldReset.value = ""
+      orderSuccess()
   }, (error) => {
       alert('Message not sent', error)
   })
+}
+
+function orderSuccess(){
+  router.push('/order-success')
 }
 </script>
 <template>
@@ -72,7 +89,7 @@ const sendMail = () => {
           </label>
         </div>
         <div class="py-4 relative">
-          <input type="email" placeholder="Email address" id="email" class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full" required>
+          <input type="email" placeholder="Email address" id="email" name="email" class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full" required>
           <label 
             for="email" 
             class="absolute -top-1.5 text-sm left-1.5 cursor-text font-semibold
@@ -84,7 +101,7 @@ const sendMail = () => {
           </label>
         </div>
         <div class="py-4 relative">
-          <input type="tel" placeholder="Phone number" id="tel" class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full" required>
+          <input type="tel" placeholder="Phone number" id="tel" name="tel" class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full" required>
           <label 
             for="tel" 
             class="absolute -top-1.5 text-sm left-1.5 cursor-text font-semibold
@@ -125,7 +142,7 @@ const sendMail = () => {
        <Transition>
         <div v-if="deliveryMethod === 'to-door'" class="z-0">
           <div class="py-4 relative mt-3">
-            <input type="address" placeholder="Address" id="address" class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full">
+            <input type="address" placeholder="Address" name="address" id="address" class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full" required>
             <label 
               for="address" 
               class="absolute -top-1.5 text-sm left-1.5 cursor-text font-semibold
@@ -140,9 +157,11 @@ const sendMail = () => {
             <input 
               type="number" 
               placeholder="Postal Code" 
-              id="postal-code" 
+              id="postal-code"
+              name="postal-code"
               class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full
-              [-moz-appearance:_textfield] [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none">
+              [-moz-appearance:_textfield] [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"
+              required>
             <label 
               for="postal-code" 
               class="absolute -top-1.5 text-sm left-1.5 cursor-text font-semibold
@@ -157,8 +176,10 @@ const sendMail = () => {
             <input 
               type="text" 
               placeholder="Province/State" 
-              id="provice-state" 
-              class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full">
+              id="provice-state"
+              name="province-state" 
+              class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full"
+              required>
             <label 
               for="province-state" 
               class="absolute -top-1.5 text-sm left-1.5 cursor-text font-semibold
@@ -173,8 +194,10 @@ const sendMail = () => {
             <input 
               type="text" 
               placeholder="Country" 
+              name="country"
               id="country" 
-              class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full">
+              class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full"
+              required>
             <label 
               for="country" 
               class="absolute -top-1.5 text-sm left-1.5 cursor-text font-semibold
@@ -196,7 +219,9 @@ const sendMail = () => {
               type="text" 
               placeholder="Postnet Branch" 
               id="postnet-branch" 
-              class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full">
+              class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full"
+              name="postnet"
+              required>
             <label 
               for="postnet-branch" 
               class="absolute -top-1.5 text-sm left-1.5 cursor-text font-semibold
@@ -218,7 +243,9 @@ const sendMail = () => {
               type="text" 
               placeholder="Pep Branch" 
               id="pep-branch" 
-              class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full">
+              name="pep"
+              class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full"
+              required>
             <label 
               for="pep-branch" 
               class="absolute -top-1.5 text-sm left-1.5 cursor-text font-semibold
@@ -241,7 +268,9 @@ const sendMail = () => {
               type="text" 
               placeholder="PUDO Branch" 
               id="pudo-branch" 
-              class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full">
+              name="pudo"
+              class="peer placeholder-transparent border-b focus:outline-none p-1 rounded text-sm w-full"
+              required>
             <label 
               for="pudo-branch" 
               class="absolute -top-1.5 text-sm left-1.5 cursor-text font-semibold
@@ -264,6 +293,7 @@ const sendMail = () => {
         <textarea 
           id="note" 
           rows="4"
+          name="note"
           class="border-b focus:outline-none p-1 mt-2 rounded text-sm w-full">
         </textarea>
       </div>
@@ -277,12 +307,12 @@ const sendMail = () => {
         </button>
       </div>
       <!-- Hidden inputs that hold the order information to be sent in the email -->
-      <div class="">
-        <input type="text" name="products" :value="products">
+      <div class="w-full hidden" v-for="product in products" :key="product.productID">
+        <input class="w-full" type="text" name="products" 
+        :value="product.productID + ' - ' + product.productName + ' - R' + product.productPrice + ' - Quantity: ' + product.quantity">
       </div>
     </div>
   </form>
-  
 </template>
 
 <style>

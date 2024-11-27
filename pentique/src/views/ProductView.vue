@@ -109,10 +109,10 @@ function showCartPopup(value){
       
     </div>    
   </div>
-  <Transition>
+  <Transition name="notification">
     <NotificationPopup message="Item Added to Cart" type="success" v-if="addedToCart == 1"></NotificationPopup>
   </Transition>
-  <Transition>
+  <Transition name="notification">
     <NotificationPopup message="Item Already In Cart" type="warning" v-if="addedToCart == 2"></NotificationPopup>
   </Transition>
   
@@ -120,13 +120,13 @@ function showCartPopup(value){
 </template>
 
 <style>
-.v-enter-active,
-.v-leave-active {
+.notification-enter-active,
+.notification-leave-active {
   transition: all 0.5s ease-in-out;
 }
 
-.v-enter-from,
-.v-leave-to {
+.notification-enter-from,
+.notification-leave-to {
   transform: translateX(150px);
   opacity: 0;
 }
