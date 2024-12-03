@@ -11,6 +11,7 @@
   async function getCategories() {
     try {
       const response = await axios.get("http://localhost:5000/category1");
+      //const response = await axios.get("http://155.93.243.197:5000/category1");
       items.value = response.data;
     } catch (err) {
       console.log(err);

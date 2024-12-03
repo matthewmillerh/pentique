@@ -67,7 +67,7 @@ function validateQuantity(){
                 <span class="text-sm">Quantity: 
                     <input 
                         type="text"
-                        class="px-1 rounded w-16" 
+                        class="px-1 rounded w-12" 
                         v-model="quantityCurrentValue" 
                         @focusout="resetQuantityBox()"
                         @input="$emit('checkout-disabled', checkoutDisabled)"

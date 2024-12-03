@@ -7,6 +7,7 @@ import ProductView from '@/views/ProductView.vue'
 import ShoppingCart from '@/views/ShoppingCart.vue'
 import CheckoutView from '@/views/CheckoutView.vue'
 import OrderSuccess from '@/views/OrderSuccess.vue'
+import OrderFailure from '@/views/OrderFailure.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -58,6 +59,11 @@ const router = createRouter({
       path: '/order-success',
       name: 'order-success',
       component: OrderSuccess
+    },
+    {
+      path: '/order-failure',
+      name: 'order-failure',
+      component: OrderFailure
     }
   ]
 })

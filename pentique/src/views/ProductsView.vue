@@ -19,6 +19,7 @@ onMounted (() => {
 async function getProductsByCategory() {
   try {
     const response = await axios.get("http://localhost:5000/products-by-category/" + route.params.category1ID)
+    //const response = await axios.get("http://155.93.243.197:5000/products-by-category/" + route.params.category1ID)
     products.value = response.data
     filteredProducts.value = products.value.filter(filterProducts)
   } catch (err) {

@@ -28,6 +28,7 @@ async function getProductByID(id, qty) {
 
     try {
       const response = await axios.get("http://localhost:5000/products/" + id)
+      //const response = await axios.get("http://155.93.243.197:5000/products/" + id)
   
       //add the quantity of the product in the cart to the product array
       productInfo = response.data

@@ -35,6 +35,7 @@ function createCart(){
 async function getProductByID() {
   try {
     const response = await axios.get("http://localhost:5000/products/" + route.params.productID)
+    //const response = await axios.get("http://155.93.243.197:5000/products/" + route.params.productID)
     product.value = response.data
   } catch (err) {
     console.log(err)
@@ -70,7 +71,7 @@ function showCartPopup(value){
   <div>
     <h1 class="text-lg font-semibold pl-6 pb-0 pt-3">{{ product.productName }}</h1>
     <div class="flex flex-wrap justify-left p-6">
-      <div class="h-[350px] grid grid-rows-3 grid-cols-1 w-28 mr-4 rounded-lg">
+      <div class="h-[350px] grid grid-rows-3 grid-cols-1 w-28 mr-4 mb-4 rounded-lg">
         <div class="flex justify-center p-2 border border-blue-300 rounded-lg mb-1">
           <img :src="'/images/' + product.category1Name + '/' + (product.category2Name ? product.category2Name + '/' : '') + (product.category3Name ? product.category3Name + '/' : '') + product.productFileName" 
             class="max-w-full max-h-full self-center" 
@@ -90,7 +91,7 @@ function showCartPopup(value){
           >
         </div>
       </div>
-      <div class="rounded-lg p-4 border max-w-64 h-[350px] border-blue-300">
+      <div class="rounded-lg p-4 mb-4 border max-w-64 h-[350px] border-blue-300">
         <img :src="'/images/' + product.category1Name + '/' + (product.category2Name ? product.category2Name + '/' : '') + (product.category3Name ? product.category3Name + '/' : '') + product.productFileName" 
         class="max-w-full max-h-full self-center" 
         alt="Product Image"
