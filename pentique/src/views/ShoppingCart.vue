@@ -42,7 +42,7 @@ async function getProductByID(id, qty) {
 const cartTotalValue = computed(() => {
   let cartTotal = 0
    products.value.forEach(element => {
-    cartTotal += (element.productPrice*element.quantity)
+    cartTotal += ((element.productSpecialPrice > 0 ? element.productSpecialPrice : element.productPrice) * element.quantity)
    })
    return cartTotal
 })
@@ -76,10 +76,11 @@ function removeFromCart(index){
 
 //empty the entire cart
 function emptyCart(){
+  shoppingCart.value.length = 0
   products.value.length = 0
 
   //Save the updated cart array to localStorage
-  saveCart(products.value)
+  saveCart(shoppingCart.value)
 }
 
 function setCheckoutButton(value){
@@ -93,7 +94,7 @@ function setCheckoutButton(value){
         <ProductCardCart
         :category1-name="product.category1Name" :category2-name="product.category2Name" :category3-name="product.category3Name" :product-name="product.productName" 
         :image-u-r-l="product.productFileName"
-        :product-price="product.productPrice" :product-quantity="product.quantity" :productID="product.productID" :category1ID="product.category1ID" :index="index"
+        :product-price="product.productSpecialPrice > 0 ? product.productSpecialPrice : product.productPrice" :product-quantity="product.quantity" :productID="product.productID" :category1ID="product.category1ID" :index="index"
         @update-quantity="updateQuantity" @remove-from-cart="removeFromCart" @checkout-disabled="setCheckoutButton">
         </ProductCardCart>     
       </div>

@@ -91,7 +91,10 @@ function showCartPopup(value){
           >
         </div>
       </div>
-      <div class="rounded-lg p-4 mb-4 border max-w-64 h-[350px] border-blue-300">
+      <div class="rounded-lg p-4 mb-4 border max-w-64 h-[350px] border-blue-300 flex justify-center">
+        <div v-if="product.productSpecialPrice > 0" class="absolute mt-2 bg-red-500 bg-opacity-55 px-3 py-1 rounded-2xl flex items-center text-white backdrop-blur">
+            <span class="text-sm">On Sale:</span>&nbsp;<span class="font-semibold text-sm">{{ formatter.format(product.productSpecialPrice) }}</span>
+        </div>
         <img :src="'/images/' + product.category1Name + '/' + (product.category2Name ? product.category2Name + '/' : '') + (product.category3Name ? product.category3Name + '/' : '') + product.productFileName" 
         class="max-w-full max-h-full self-center" 
         alt="Product Image"
@@ -99,7 +102,7 @@ function showCartPopup(value){
       </div>
       <div class="ml-4">
         <div class="h-7">
-          <span class="font-semibold text-xl">{{ formatter.format(product.productPrice) }}</span>
+          <span class="font-semibold text-xl" :class="product.productSpecialPrice > 0 ? 'line-through' : ''">{{ formatter.format(product.productPrice) }}</span>
         </div>
         <button class="mt-3 bg-green-400 border border-green-500 rounded p-2 text-sm font-semibold shadow-lg" @click="addToCart">Add to Cart</button>
         <div class="mt-4 max-w-60">

@@ -1,14 +1,10 @@
 import mysql from "mysql2";
 
-//create connectiont to database
-//  const db = mysql.createConnection({
-//      host:"pentique.lovestoblog.com",
-//      user: "if0_37444679",
-//      password: "OoyV2ATMYHH2nP",
-//      database: "fif0_37444679_pentique"
-// });
+const userName = 'pentique_admin'
+const password = 'X:5BVLamzWD9Qd7'
+const database = 'pentique_pentiquedb'
 
- const db = mysql.createConnection({
+const db = mysql.createConnection({
      host:"localhost",
      user: "root",
      password: "",

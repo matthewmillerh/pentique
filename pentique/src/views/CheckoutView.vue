@@ -3,7 +3,8 @@ import { ref, onBeforeMount } from 'vue'
 import emailjs from '@emailjs/browser'
 import { getCart } from '@/scripts/global'
 import axios from 'axios'
-import router from '@/router';
+import router from '@/router'
+import { saveCart } from '@/scripts/global'
 
 const deliveryMethod = ref(null)
 const form = ref(null)
@@ -67,7 +68,18 @@ const sendMail = () => {
 
 function orderSuccess(){
   router.push('/order-success')
+  emptyCart()
 }
+
+//empty the entire cart
+function emptyCart(){
+  shoppingCart.value.length = 0
+  products.value.length = 0
+
+  //Save the updated cart array to localStorage
+  saveCart(shoppingCart.value)
+}
+
 </script>
 <template>
   <h1 class="text-lg font-semibold p-3 text-center">Finalize Your Order</h1>
