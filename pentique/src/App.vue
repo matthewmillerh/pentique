@@ -41,8 +41,8 @@ function setCartItemCount(){
 async function getCategories() {
   //get level 1 categories
   try {
-    const response = await axios.get("http://localhost:5000/category1")
-    //const response = await axios.get("http://155.93.243.197:5000/category1")
+    //const response = await axios.get("http://localhost:5000/category1")
+    const response = await axios.get("https://pentique.co.za:2083/category1")
     lvl1Categories.value = response.data
   } catch (err) {
     console.log(err)
@@ -50,8 +50,8 @@ async function getCategories() {
 
   //get level 2 categories
   try {
-    const response = await axios.get("http://localhost:5000/category2")
-    //const response = await axios.get("http://155.93.243.197:5000/category2")
+    //const response = await axios.get("http://localhost:5000/category2")
+    const response = await axios.get("http://pentique.co.za:5000/category2")
     lvl2Categories.value = response.data
   } catch (err) {
     console.log(err)
@@ -59,8 +59,8 @@ async function getCategories() {
 
    //get level 3 categories
    try {
-    const response = await axios.get("http://localhost:5000/category3")
-    //const response = await axios.get("http://155.93.243.197:5000/category3")
+    //const response = await axios.get("http://localhost:5000/category3")
+    const response = await axios.get("http://pentique.co.za:5000/category3")
     lvl3Categories.value = response.data
   } catch (err) {
     console.log(err)

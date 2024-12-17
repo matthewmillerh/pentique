@@ -5,10 +5,10 @@ const password = 'X:5BVLamzWD9Qd7'
 const database = 'pentique_pentiquedb'
 
 const db = mysql.createConnection({
-     host:"localhost",
-     user: "root",
-     password: "",
-     database: "pentiquedb"
+     host: "pentique.co.za",
+     user: userName,
+     password: password,
+     database: database
  });
 
 export default db;

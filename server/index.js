@@ -14,12 +14,17 @@ const app = express();
 app.use(express.json());
 
 //use cors
-app.use(cors());
+// Configure CORS to allow requests from all origins
+app.use(cors({ 
+  origin: "*", 
+  methods: ["GET", "POST", "PUT", "DELETE"], 
+  allowedHeaders: ["Content-Type", "Authorization"] 
+}))
 
 //use router
 app.use(Router);
 
 //PORT
 app.listen(5000, () => {
-  console.log("Server running successfully");
+  console.log("Server running successfully")
 });
