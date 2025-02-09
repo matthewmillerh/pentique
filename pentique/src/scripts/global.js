@@ -1,5 +1,11 @@
 import axios from 'axios'
 
+//set axios baseURL to the current environment (production or development)
+const BASE_URL = import.meta.env.VITE_APP_API_URL
+export const axios_api = axios.create({
+  baseURL: BASE_URL
+})
+
 //Format the price to Rand format
 export const formatter = new Intl.NumberFormat('en-ZA', {
     style: 'currency',
@@ -40,7 +46,7 @@ async function getProductByID(id, qty) {
     let productInfo = {}
 
     try {
-      const response = await axios.get("http://localhost:5000/products/" + id)
+      const response = await axios_api.get("/products/" + id)
   
       //add the quantity of the product in the cart to the product array
       productInfo = response.data
@@ -53,4 +59,3 @@ async function getProductByID(id, qty) {
 
     return productInfo
 }
-  

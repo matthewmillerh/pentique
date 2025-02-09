@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, onUpdated, ref, watch } from 'vue'
-import axios from 'axios'
+import { axios_api } from '@/scripts/global.js'
 import { useRoute } from 'vue-router'
 import NotificationPopup from '@/components/NotificationPopup.vue'
 import { formatter, saveCart } from '@/scripts/global.js'
@@ -34,8 +34,7 @@ function createCart(){
 //Get the product by the supplied productID
 async function getProductByID() {
   try {
-    const response = await axios.get("http://localhost:5000/products/" + route.params.productID)
-    //const response = await axios.get("http://155.93.243.197:5000/products/" + route.params.productID)
+    const response = await axios_api.get("/products/" + route.params.productID)
     product.value = response.data
   } catch (err) {
     console.log(err)

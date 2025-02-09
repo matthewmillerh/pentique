@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink, RouterView, useRoute } from 'vue-router'
 import { onMounted, ref, computed, onUpdated } from 'vue'
-import axios from 'axios'
+import { axios_api } from './scripts/global'
 import MenuIcon from 'vue-material-design-icons/Menu.vue'
 import Close from 'vue-material-design-icons/Close.vue'
 
@@ -41,8 +41,7 @@ function setCartItemCount(){
 async function getCategories() {
   //get level 1 categories
   try {
-    //const response = await axios.get("http://localhost:5000/category1")
-    const response = await axios.get("https://pentique.co.za:2083/category1")
+    const response = await axios_api.get("/category1")
     lvl1Categories.value = response.data
   } catch (err) {
     console.log(err)
@@ -50,8 +49,7 @@ async function getCategories() {
 
   //get level 2 categories
   try {
-    //const response = await axios.get("http://localhost:5000/category2")
-    const response = await axios.get("http://pentique.co.za:5000/category2")
+    const response = await axios_api.get("/category2")
     lvl2Categories.value = response.data
   } catch (err) {
     console.log(err)
@@ -59,8 +57,7 @@ async function getCategories() {
 
    //get level 3 categories
    try {
-    //const response = await axios.get("http://localhost:5000/category3")
-    const response = await axios.get("http://pentique.co.za:5000/category3")
+    const response = await axios_api.get("/category3")
     lvl3Categories.value = response.data
   } catch (err) {
     console.log(err)

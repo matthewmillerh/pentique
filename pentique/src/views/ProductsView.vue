@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, onUpdated, ref, watch } from 'vue'
-import axios from 'axios'
+import { axios_api } from '@/scripts/global'
 import { useRoute } from 'vue-router'
 import ProductCard from '@/components/ProductCard.vue'
 
@@ -18,8 +18,7 @@ onMounted (() => {
 //get all products for the current level 1 category
 async function getProductsByCategory() {
   try {
-    const response = await axios.get("http://localhost:5000/products-by-category/" + route.params.category1ID)
-    //const response = await axios.get("http://155.93.243.197:5000/products-by-category/" + route.params.category1ID)
+    const response = await axios_api.get("/products-by-category/" + route.params.category1ID)
     products.value = response.data
     filteredProducts.value = products.value.filter(filterProducts)
   } catch (err) {

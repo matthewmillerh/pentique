@@ -2,7 +2,7 @@
 import { onBeforeMount, ref, computed } from 'vue'
 import ProductCardCart from '@/components/ProductCardCart.vue'
 import { saveCart, formatter, getCart } from '@/scripts/global'
-import axios from 'axios'
+import { axios_api } from '@/scripts/global'
 
 const shoppingCart = ref([])
 const products = ref([])
@@ -25,8 +25,7 @@ async function getProductByID(id, qty) {
     let productInfo = {}
 
     try {
-      const response = await axios.get("http://localhost:5000/products/" + id)
-      //const response = await axios.get("http://155.93.243.197:5000/products/" + id)
+      const response = await axios_api.get("/products/" + id)
   
       //add the quantity of the product in the cart to the product array
       productInfo = response.data

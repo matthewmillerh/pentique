@@ -1,20 +1,22 @@
 <script setup>
-  import ProductCategoryCard from '@/components/ProductCategoryCard.vue';
-  import axios from 'axios';
-  import { onMounted, ref } from 'vue';
+  import ProductCategoryCard from '@/components/ProductCategoryCard.vue'
+  import { onMounted, ref } from 'vue'
+  import { axios_api } from '@/scripts/global'
+
+
 
   onMounted(() => {
     getCategories()
   })
 
   const items = ref(null)
+
   async function getCategories() {
     try {
-      //const response = await axios.get("http://localhost:5000/category1");
-      const response = await axios.get("http://pentique.co.za:5000/category1");
-      items.value = response.data;
+      const response = await axios_api.get("/category1")
+      items.value = response.data
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
   }
 </script>
