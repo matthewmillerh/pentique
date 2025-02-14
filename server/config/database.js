@@ -1,21 +1,19 @@
-import mysql from "mysql2";
+import mysql from "mysql2"
+import dotenv from "dotenv"
 
-const host = 'pentique.co.za'
-const userName = 'pentique_admin'
-const password = 'X:5BVLamzWD9Qd7'
-const database = 'pentique_pentiquedb'
+const envFileName = `.env.${process.env.NODE_ENV || "development"}`
+dotenv.config({ path: envFileName })
 
-const localHost = 'localhost'
-const localUserName = 'root'
-const localPassword = ''
-const localDatabase = 'pentiquedb'
-
+const host = process.env.DB_URL
+const userName = process.env.DB_USERNAME
+const password = process.env.DB_PASSWORD
+const database = process.env.DB_NAME
 
 const db = mysql.createConnection({
-     host: localHost,
-     user: localUserName,
-     password: localPassword,
-     database: localDatabase
- });
+     host: host,
+     user: userName,
+     password: password,
+     database: database
+ })
 
-export default db;
+export default db

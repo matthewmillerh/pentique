@@ -1,17 +1,12 @@
-//import express
-import express from "express";
-
-//import cors
-import cors from "cors";
-
-//import routes
-import Router from "./routes/routes.js";
+import express from "express"
+import cors from "cors"
+import Router from "./routes/routes.js"
 
 //init express
-const app = express();
+const app = express()
 
 //use express json
-app.use(express.json());
+app.use(express.json())
 
 //use cors
 // Configure CORS to allow requests from all origins
@@ -22,9 +17,9 @@ app.use(cors({
 }))
 
 //use router
-app.use(Router);
+app.use(Router)
 
 //PORT
 app.listen(5000, () => {
-  console.log("Server running successfully")
+  console.log("Server running successfully ")
 });

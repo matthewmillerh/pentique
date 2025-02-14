@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start-dev": "powershell -Command \"$env:NODE_ENV='development'; nodemon index.js\"",
+    "start-prod": "powershell -Command \"$env:NODE_ENV='production'; nodemon index.js\""
   },
   "keywords": [],
   "author": "",

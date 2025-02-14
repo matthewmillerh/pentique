@@ -185,7 +185,11 @@ function toggleMobileMenu(){
         <!-- Main nav list for level 1 categories-->
         <ul class="text-sm">
           <li v-for="category1 in lvl1Categories" class="border-b rounded-lg">
-            <RouterLink :to="'/products/' + category1.category1Name + '/' + category1.category1ID" class="h-full w-full block px-3 py-2 category-item rounded-lg transition-all">{{ category1.category1Name }}</RouterLink>
+            <RouterLink 
+              :to="currentCategory(category1.category1ID) ? '/' : '/products/' + category1.category1Name + '/' + category1.category1ID" 
+              class="h-full w-full block px-3 py-2 category-item rounded-lg transition-all">
+            {{ category1.category1Name }}
+            </RouterLink>
             
             <!-- Div wrapper for grid transition-->
              <Transition>
@@ -241,7 +245,7 @@ function toggleMobileMenu(){
   transition: grid-template-rows 0.3s ease;
 }
 
-.-enter-from,
+.v-enter-from,
 .v-leave-to {
   grid-template-rows: 0fr;
 }

@@ -6,7 +6,7 @@
 
 
   onMounted(() => {
-    getCategories()
+    setTimeout(() => getCategories(), 500)
   })
 
   const items = ref(null)
