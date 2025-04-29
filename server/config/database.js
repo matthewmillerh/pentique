@@ -1,8 +1,7 @@
-import mysql from "mysql2"
-import dotenv from "dotenv"
+import mysql from 'mysql2'
+import dotenv from 'dotenv'
 
-const envFileName = `.env.${process.env.NODE_ENV || "development"}`
-dotenv.config({ path: envFileName })
+dotenv.config()
 
 const host = process.env.DB_URL
 const userName = process.env.DB_USERNAME
@@ -10,10 +9,10 @@ const password = process.env.DB_PASSWORD
 const database = process.env.DB_NAME
 
 const db = mysql.createConnection({
-     host: host,
-     user: userName,
-     password: password,
-     database: database
- })
+    host: host,
+    user: userName,
+    password: password,
+    database: database,
+})
 
 export default db
