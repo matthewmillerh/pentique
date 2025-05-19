@@ -1,8 +1,10 @@
 {
-  "compilerOptions": {
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "exclude": ["node_modules", "dist"]
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./src/*"],
+            "@shared/*": ["../shared/*"]
+        }
+    },
+    "exclude": ["node_modules", "dist"]
 }

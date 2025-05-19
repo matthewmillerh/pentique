@@ -11,11 +11,11 @@ const currentDir = dirname(fileURLToPath(import.meta.url))
 
 // https://vite.dev/config/
 export default defineConfig({
-    plugins: [vue(), vueDevTools(), tailwindcss()],
-    resolve: {
-        alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url)),
-            '@shared': resolve(currentDir, '../shared'),
-        },
+  plugins: [vue(), vueDevTools(), tailwindcss()],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@shared': resolve(currentDir, '../shared'),
     },
+  },
 })

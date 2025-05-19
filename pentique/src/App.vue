@@ -1,121 +1,121 @@
 <script setup>
-import { RouterLink, RouterView, useRoute } from 'vue-router';
-import { onMounted, ref, computed, onUpdated } from 'vue';
-import { axios_api } from './scripts/global';
-import MenuIcon from 'vue-material-design-icons/Menu.vue';
-import Close from 'vue-material-design-icons/Close.vue';
+import { RouterLink, RouterView, useRoute } from 'vue-router'
+import { onMounted, ref, computed, onUpdated } from 'vue'
+import { axios_api } from './scripts/global'
+import MenuIcon from 'vue-material-design-icons/Menu.vue'
+import Close from 'vue-material-design-icons/Close.vue'
 
-const lvl1Categories = ref([]);
-const lvl2Categories = ref([]);
-const lvl3Categories = ref([]);
-const route = useRoute();
-const cartItemCount = ref(0);
-const showMobileMenu = ref(false);
+const lvl1Categories = ref([])
+const lvl2Categories = ref([])
+const lvl3Categories = ref([])
+const route = useRoute()
+const cartItemCount = ref(0)
+const showMobileMenu = ref(false)
 
 onMounted(() => {
     //get all top level product categories
-    getCategories();
+    getCategories()
 
-    setCartItemCount();
-});
+    setCartItemCount()
+})
 
 //Set the value of cartItemCount to show and update the amount of items currently in the cart
 function setCartItemCount() {
     //create a cart entry in localStorage if it does not exist
     if (!localStorage.getItem('cart')) {
-        localStorage.setItem('cart', '[]');
+        localStorage.setItem('cart', '[]')
     }
 
-    cartItemCount.value = JSON.parse(localStorage.getItem('cart')).length;
+    cartItemCount.value = JSON.parse(localStorage.getItem('cart')).length
 
     //Create an event listener to update cartItemCount when an item is added to the cart in localStorage
     window.addEventListener('item-added-to-cart', event => {
-        cartItemCount.value = event.detail.storage.length;
-    });
+        cartItemCount.value = event.detail.storage.length
+    })
 }
 
 //get all level 1, 2 and 3 categories from the database
 async function getCategories() {
     //get level 1 categories
     try {
-        const response = await axios_api.get('/category1');
-        lvl1Categories.value = response.data;
+        const response = await axios_api.get('/category1')
+        lvl1Categories.value = response.data
     } catch (err) {
-        console.log(err);
+        console.log(err)
     }
 
     //get level 2 categories
     try {
-        const response = await axios_api.get('/category2');
-        lvl2Categories.value = response.data;
+        const response = await axios_api.get('/category2')
+        lvl2Categories.value = response.data
     } catch (err) {
-        console.log(err);
+        console.log(err)
     }
 
     //get level 3 categories
     try {
-        const response = await axios_api.get('/category3');
-        lvl3Categories.value = response.data;
+        const response = await axios_api.get('/category3')
+        lvl3Categories.value = response.data
     } catch (err) {
-        console.log(err);
+        console.log(err)
     }
 }
 
 //Check if level 1 category has subcategories by supplied ID
 function hasCategory2(category1ID) {
-    let hasCategory2 = false;
+    let hasCategory2 = false
     lvl2Categories.value.some(element => {
         if (element.category1ID === category1ID) {
-            return (hasCategory2 = true);
+            return (hasCategory2 = true)
         } else {
-            return (hasCategory2 = false);
+            return (hasCategory2 = false)
         }
-    });
-    return hasCategory2;
+    })
+    return hasCategory2
 }
 
 //Check if level 2 category has subcategories by supplied ID
 function hasCategory3(category2ID) {
-    let hasCategory3 = false;
+    let hasCategory3 = false
     lvl3Categories.value.some(element => {
         if (element.category2ID === category2ID) {
-            return (hasCategory3 = true);
+            return (hasCategory3 = true)
         } else {
-            return (hasCategory3 = false);
+            return (hasCategory3 = false)
         }
-    });
-    return hasCategory3;
+    })
+    return hasCategory3
 }
 
 //Return an array of level 2 categories for the specified level 1 category
 function lvl2ByID(category1ID) {
-    let filteredLvl2Categories = [];
+    let filteredLvl2Categories = []
     lvl2Categories.value.forEach(element => {
         if (element.category1ID === category1ID) {
-            filteredLvl2Categories.push(element);
+            filteredLvl2Categories.push(element)
         }
-    });
-    return filteredLvl2Categories;
+    })
+    return filteredLvl2Categories
 }
 
 //Return an array of level 3 categories for the specified level 2 category
 function lvl3ByID(category2ID) {
-    let filteredLvl3Categories = [];
+    let filteredLvl3Categories = []
     lvl3Categories.value.forEach(element => {
         if (element.category2ID === category2ID) {
-            filteredLvl3Categories.push(element);
+            filteredLvl3Categories.push(element)
         }
-    });
-    return filteredLvl3Categories;
+    })
+    return filteredLvl3Categories
 }
 
-//shows the subcategories of the currently selected category
+//resets the product menu if the currently displayed category is clicked on while it is open
 function currentCategory(category1ID) {
-    return category1ID == route.params.category1ID ? true : false;
+    return category1ID == route.params.category1ID ? true : false
 }
 
 function toggleMobileMenu() {
-    showMobileMenu.value = !showMobileMenu.value;
+    showMobileMenu.value = !showMobileMenu.value
 }
 </script>
 

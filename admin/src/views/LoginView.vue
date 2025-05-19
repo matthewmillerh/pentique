@@ -11,7 +11,6 @@ const router = useRouter()
 // Check if the user is already logged in and validate the token
 const tokenValidation = validateToken()
 if (tokenValidation.valid) {
-  console.log('Token is valid:', tokenValidation.decoded)
   router.push({ name: 'home' }) // Redirect to home
 } else {
   console.warn('Token validation failed:', tokenValidation.reason)

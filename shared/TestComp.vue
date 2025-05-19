@@ -1,5 +1,4 @@
 <script setup></script>
-
 <template>
-  <main></main>
+  <div>HELLO</div>
 </template>
