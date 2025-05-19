@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView, useRoute } from 'vue-router'
-import { onMounted, ref, computed, onUpdated } from 'vue'
+import { onMounted, ref } from 'vue'
 import { axios_api } from './scripts/global'
 import MenuIcon from 'vue-material-design-icons/Menu.vue'
 import Close from 'vue-material-design-icons/Close.vue'

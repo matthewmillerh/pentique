@@ -1,40 +1,44 @@
 <script setup>
 import { axios_api } from "@shared/scripts/global.js"
-import { onMounted } from "vue"
-
-onMounted(() => {
-  //get all top level product categories
-  getCategories()
-})
+import { onMounted, ref } from "vue"
+import { RouterLink, RouterView, useRoute } from "vue-router"
 
 const lvl1Categories = ref([])
 const lvl2Categories = ref([])
 const lvl3Categories = ref([])
-//get all level 1, 2 and 3 categories from the database
-async function getCategories() {
-  //get level 1 categories
-  try {
-    const response = await axios_api.get("/category1")
-    lvl1Categories.value = response.data
-  } catch (err) {
-    console.log(err)
-  }
+const allCategories = ref([])
 
-  //get level 2 categories
-  try {
-    const response = await axios_api.get("/category2")
-    lvl2Categories.value = response.data
-  } catch (err) {
-    console.log(err)
-  }
+const route = useRoute()
+onMounted(() => {
+  getAllCategories()
+})
 
-  //get level 3 categories
+//get all the categories and subcategories
+async function getAllCategories() {
   try {
-    const response = await axios_api.get("/category3")
-    lvl3Categories.value = response.data
+    const response = await axios_api.get("/get-all-categories")
+    allCategories.value = response.data
+
+    allCategories.value.forEach((value) => {
+      console.log(value.name)
+
+      value.subcategories.forEach((value) => {
+        console.log("--" + value.name)
+
+        value.subcategories.forEach((value) => {
+          console.log("-----" + value.name)
+        })
+      })
+    })
+    console.log(allCategories.value)
   } catch (err) {
     console.log(err)
   }
+}
+
+//resets the product menu if the currently displayed category is clicked on while it is open
+function currentCategory(category1ID) {
+  return category1ID == route.params.category1ID ? true : false
 }
 </script>
 <template>
@@ -42,52 +46,39 @@ async function getCategories() {
     class="fixed hidden max-h-[80%] w-[17%] max-w-[17%] overflow-y-auto overflow-x-hidden rounded-lg border border-blue-300 bg-blue-200 shadow sm:block">
     <!-- Main nav list for level 1 categories-->
     <ul class="text-sm">
-      <li v-for="category1 in lvl1Categories" class="rounded-lg border-b">
+      <li v-for="category1 in allCategories" class="rounded-lg border-b">
+        <!-- Loop through all top level categories -->
         <RouterLink
           :to="
-            currentCategory(category1.category1ID)
+            currentCategory(category1.id)
               ? '/'
-              : '/products/' +
-                category1.category1Name +
-                '/' +
-                category1.category1ID
+              : '/products/' + category1.name + '/' + category1.id
           "
           class="category-item block h-full w-full rounded-lg px-3 py-2 transition-all">
-          {{ category1.category1Name }}
+          {{ category1.name }}
         </RouterLink>
 
+        <!-- Loop through all level 2 categories -->
         <!-- Div wrapper for grid transition-->
         <Transition>
-          <div
-            class="grid grid-rows-[1fr]"
-            v-show="currentCategory(category1.category1ID)">
+          <div class="grid grid-rows-[1fr]" v-show="true">
             <div class="overflow-hidden">
               <!-- Nav list for level 2 categories -->
-              <ul v-if="hasCategory2(category1.category1ID)">
-                <li v-for="category2 in lvl2ByID(category1.category1ID)">
+              <ul v-if="category1.subcategories.length">
+                <li v-for="category2 in category1.subcategories">
                   <RouterLink
-                    :to="
-                      '/products/' +
-                      category2.category2Name +
-                      '/' +
-                      category1.category1ID
-                    "
+                    :to="'/products/' + category2.name + '/' + category1.id"
                     class="category-item block rounded-lg py-1 pl-4 pr-2 transition-all"
-                    >- {{ category2.category2Name }}</RouterLink
+                    >- {{ category2.name }}</RouterLink
                   >
 
                   <!-- Nav list for level 3 categories -->
-                  <ul v-if="hasCategory3(category2.category2ID)">
-                    <li v-for="category3 in lvl3ByID(category2.category2ID)">
+                  <ul v-if="category2.subcategories.length">
+                    <li v-for="category3 in category2.subcategories">
                       <RouterLink
-                        :to="
-                          '/products/' +
-                          category3.category3Name +
-                          '/' +
-                          category1.category1ID
-                        "
+                        :to="'/products/' + category3.name + '/' + category1.id"
                         class="category-item block rounded-lg py-1 pl-8 pr-2 transition-all"
-                        >- {{ category3.category3Name }}</RouterLink
+                        >-- {{ category3.name }}</RouterLink
                       >
                     </li>
                   </ul>

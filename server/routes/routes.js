@@ -16,6 +16,7 @@ import {
     showCategory2,
     showCategory3,
     showSubCategories,
+    allCategories,
 } from '../controllers/category.js'
 
 //import authorization functions
@@ -41,6 +42,9 @@ router.put('/products/:id', updateProduct)
 
 // Delete Product
 router.delete('/products/:id', deleteProduct)
+
+// get a list of all the categories and their subcategories
+router.get('/get-all-categories', allCategories)
 
 //get all category 1 items
 router.get('/category1', showCategory1)
